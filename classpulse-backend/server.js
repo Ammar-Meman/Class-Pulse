@@ -1,6 +1,10 @@
 const express = require("express");
+const cors = require("cors");
+
 const app = express();
+
 app.use(express.json());
+app.use(cors());
 
 let sessionCode = null;
 let polls = [];
@@ -86,55 +90,58 @@ app.post("/create-poll", (req, res) => {
 
 app.post("/vote", (req, res) => {
 
+  console.log("Body received:", req.body);
+
   const { vote , voterId} = req.body;
 
-  console.log("Vote received:", vote, "from", voterId)
-
+  
   if (!activePoll) {
     return res.status(400).json({
       message: "No active poll"
     });
   }
-
-    if (!activePoll.active) {
+  
+  if (!activePoll.active) {
     return res.status(400).json({
       message: "Poll is closed"
     });
   }
-
-    if (!voterId) {
+  
+  if (!voterId) {
     return res.status(400).json({
       message: "Voter ID required"
     });
   }
-
-  //   if (activePoll.voters.includes(voterId)) {
-  //   return res.status(400).json({
-  //     message: "You already voted"
-  //   });
-  // }
-
-  if (activePoll.voters.includes(voterId))
-activePoll.voters.push(voterId)
-
-  if (vote !== "yes" && vote !== "no") {
-    return res.status(400).json({
-      message: "Vote must be yes or no"
-    });
-  }
-
-  if (vote === "yes") {
-    activePoll.yes++;
-  } else if (vote === "no") {
-    activePoll.no++;
-  } else {
-    return res.status(400).json({
-      message: "Invalid vote"
-    });
-  }
-
-  activePoll.voters.push(voterId);
-
+  
+    if (activePoll.voters.includes(voterId)) {
+      return res.status(400).json({
+          message: "You already voted"
+        });
+      }
+      
+      // if (activePoll.voters.includes(voterId))
+      //   activePoll.voters.push(voterId)
+      
+      if (vote !== "yes" && vote !== "no") {
+        return res.status(400).json({
+          message: "Vote must be yes or no"
+        });
+      }
+      
+      if (vote === "yes") {
+        activePoll.yes++;
+      } else if (vote === "no") {
+        activePoll.no++;
+      } else {
+        return res.status(400).json({
+          message: "Invalid vote"
+        });
+      }
+      
+      activePoll.voters.push(voterId);
+      
+      console.log("Vote received:", vote, "from", voterId)
+      
   res.json({
     message: "Vote recorded",
     poll: activePoll
