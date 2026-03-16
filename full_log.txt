@@ -1,0 +1,9 @@
+8d9d2cf (origin/main, origin/HEAD) Merge pull request #3 from Ammar-Meman/frontend-join-session
+fa36cfe (origin/backend-mvp, backend-mvp) Fix folder restructure and keep local changes
+be9fda9 (origin/frontend-join-session, frontend-join-session) implement JoinSession page with session validation and navigation to vote page
+a8bc81d (HEAD -> main) Merge pull request #2 from Ammar-Meman/backend-mvp
+1f5f90f Implement polling backend mvp
+e4a1b73 Add gitignore for node backend
+a99258b Merge pull request #1 from Ammar-Meman/main
+32797fb Updated Readme
+8100dbf Initial commit
