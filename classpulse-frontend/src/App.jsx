@@ -4,10 +4,13 @@ import VotePage from "./components/VotePage";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<JoinSession />} />
-      <Route path="/vote" element={<VotePage />} />
-    </Routes>
+    <div>
+      <Routes>
+        <Route path="/" element={<JoinSession />} />
+        <Route path="/vote" element={<VotePage />} />
+      </Routes>
+      <div className="text-8xl font-bold text-center mt-10">Hello</div>
+    </div>
   );
 }
 
