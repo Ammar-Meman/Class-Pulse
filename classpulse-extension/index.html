@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ClassPulse Extension</title>
+    <style>
+        body { 
+            width: 320px; 
+            padding: 20px; 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background: #0f172a; 
+            color: #f8fafc; 
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Tabs Styling */
+        .tabs {
+            display: flex;
+            background: #1e293b;
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .view { display: none; flex-direction: column; gap: 16px; }
+        .view.active { display: flex; }
+
+        h3 { margin: 0; font-size: 1.125rem; }
+        p { margin: 0; font-size: 0.75rem; color: #94a3b8; }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: white;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        button.main-btn {
+            width: 100%;
+            padding: 12px;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: #3b82f6;
+            color: white;
+            transition: opacity 0.2s;
+        }
+
+        button.main-btn:hover { opacity: 0.9; }
+
+        /* Teacher Dashboard Mini UI */
+        .dashboard-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid #334155;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        #session-code-display {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            color: #60a5fa;
+            margin: 10px 0;
+        }
+
+        .vote-btn {
+            height: 48px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .stats-box {
+            padding: 10px; 
+            background: #000; 
+            border-radius: 8px; 
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <!-- Persistent Tabs -->
+    <div class="tabs">
+        <button class="tab-btn active" id="tab-student">Student</button>
+        <button class="tab-btn" id="tab-teacher">Teacher</button>
+    </div>
+
+    <!-- View: Student Join -->
+    <div id="student-view" class="view active">
+        <div id="join-view">
+            <h3>Join Session</h3>
+            <p>Sync with classroom relay.</p>
+            <input type="number" id="session-code" placeholder="ENTER CODE">
+            <button id="join-btn" class="main-btn">Access Session</button>
+        </div>
+
+        <div id="vote-view" class="hidden">
+            <h3 id="question" style="color: #60a5fa;">Awaiting Poll...</h3>
+            <div id="poll-controls" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                <button id="vote-yes" class="vote-btn" style="background: #16a34a;">Vote YES</button>
+                <button id="vote-no" class="vote-btn" style="background: #dc2626;">Vote NO</button>
+            </div>
+
+            <!-- Student Results View -->
+            <div id="student-results" class="stats-box hidden">
+                <p uppercase style="font-size: 10px; font-weight: 800; color: #fbbf24; margin-bottom: 5px;">Current Standings</p>
+                <div style="display: flex; justify-content: space-around;">
+                    <div><span style="color: #4ade80;">YES:</span> <span id="s-res-yes">0</span></div>
+                    <div><span style="color: #f87171;">NO:</span> <span id="s-res-no">0</span></div>
+                </div>
+                <button id="s-refresh-btn" style="font-size: 9px; background: transparent; color: #60a5fa; border: 1px solid #334155; padding: 2px 8px; border-radius: 4px; cursor: pointer; margin-top: 8px;">REFRESH DATA</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View: Teacher Login -->
+    <div id="teacher-login-view" class="view">
+        <h3>Teacher Portal</h3>
+        <p>Authenticate to command center.</p>
+        <input type="text" id="teacher-email" placeholder="Email">
+        <input type="password" id="teacher-password" placeholder="Password">
+        <button id="login-btn" class="main-btn">Sign In</button>
+    </div>
+
+    <!-- View: Teacher Dashboard Mini -->
+    <div id="teacher-dash-view" class="view">
+        <div class="dashboard-card">
+            <p uppercase style="font-size: 10px; font-weight: 800; color: #60a5fa;">Active Session Port</p>
+            <div id="session-code-display">----</div>
+            <button id="gen-code-btn" style="font-size: 10px; background: transparent; color: #94a3b8; border: 1px solid #334155; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Generate Code</button>
+        </div>
+
+        <div style="margin-top: 10px;">
+            <p uppercase style="font-size: 10px; font-weight: 800; margin-bottom: 5px;">Broadcasting</p>
+            <textarea id="poll-question" placeholder="Enter question..." style="width: 100%; background: #1e293b; border: 1px solid #334155; color: white; padding: 8px; border-radius: 8px; resize: none;"></textarea>
+            <button id="deploy-poll-btn" class="main-btn" style="margin-top: 5px;">Deploy Poll</button>
+        </div>
+
+        <div class="stats-box">
+             <p uppercase style="font-size: 10px; font-weight: 800; color: #fbbf24; margin-bottom: 5px;">Live Stats</p>
+             <div style="display: flex; justify-content: space-around;">
+                 <div><span style="color: #4ade80;">YES:</span> <span id="res-yes">0</span></div>
+                 <div><span style="color: #f87171;">NO:</span> <span id="res-no">0</span></div>
+             </div>
+             <button id="refresh-res-btn" style="font-size: 10px; background: transparent; color: #94a3b8; border: none; margin-top: 5px; cursor: pointer;">Refresh</button>
+        </div>
+
+        <button id="terminate-poll-btn" style="width: 100%; margin-top: 10px; background: rgba(220, 38, 38, 0.1); border: 1px solid #dc2626; color: #f87171; padding: 8px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer;">TERMINATE CURRENT POLL</button>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
