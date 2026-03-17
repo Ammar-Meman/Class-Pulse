@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config";
 
 function TeacherLogin({ theme }) {
   const [email, setEmail] = useState("");
@@ -7,7 +8,7 @@ function TeacherLogin({ theme }) {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    const response = await fetch("http://localhost:3000/login", {
+    const response = await fetch(`${API_BASE_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -29,15 +30,15 @@ function TeacherLogin({ theme }) {
   const isNature = theme === "nature";
 
   return (
-    <div className="glass-panel p-16 rounded-[3rem] w-full max-w-xl mx-auto space-y-12 transition-all duration-500 hover:scale-[1.01]">
+    <div className="glass-panel p-8 sm:p-16 rounded-[2rem] sm:rounded-[3rem] w-full max-w-xl mx-auto space-y-8 sm:space-y-12 transition-all duration-500 hover:scale-[1.01]">
       <div className="text-center sm:text-left space-y-3">
-        <h1 className="text-5xl font-black uppercase tracking-tighter leading-none italic">
+        <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tighter leading-none italic">
           Teacher<br /><span className={isNature ? "text-success" : "text-brutal-red"}>Terminal</span>
         </h1>
-        <p className="text-xs font-mono font-black uppercase tracking-widest opacity-60">Authentication Protocol Required</p>
+        <p className="text-[10px] sm:text-xs font-mono font-black uppercase tracking-widest opacity-60">Authentication Protocol Required</p>
       </div>
 
-      <div className="space-y-8">
+      <div className="space-y-6 sm:space-y-8">
         <div className="space-y-3">
           <label className="text-[10px] font-mono font-black uppercase tracking-[0.4em] ml-2">Email Identity</label>
           <input
@@ -64,7 +65,7 @@ function TeacherLogin({ theme }) {
 
         <button 
           onClick={handleLogin}
-          className={`w-full py-6 btn-brutal text-2xl mt-4
+          className={`w-full py-4 sm:py-6 btn-brutal text-xl sm:text-2xl mt-4
             ${isNature ? "bg-brutal-green text-black" : "bg-brutal-red text-white border-white shadow-[4px_4px_0px_0px_white]"}`}
         >
           Sign In

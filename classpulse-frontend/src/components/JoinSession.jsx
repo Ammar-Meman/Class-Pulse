@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config";
 
 function JoinSession({ theme }) {
   const [code, setCode] = useState("");
@@ -13,7 +14,7 @@ function JoinSession({ theme }) {
   }
 
   const handleJoin = async () => {
-    const response = await fetch("http://localhost:3000/join-session", {
+    const response = await fetch(`${API_BASE_URL}/join-session`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -35,36 +36,36 @@ function JoinSession({ theme }) {
   const isNature = theme === "nature";
 
   return (
-    <div className="glass-panel p-16 rounded-[1rem] text-center space-y-12 max-w-xl mx-auto transition-all duration-500">
+    <div className="glass-panel p-8 sm:p-16 rounded-[1rem] text-center space-y-8 sm:space-y-12 max-w-xl mx-auto transition-all duration-500">
       <div className="space-y-4">
-        <h1 className="text-7xl font-black tracking-tighter uppercase leading-none italic">
+        <h1 className="text-4xl sm:text-7xl font-black tracking-tighter uppercase leading-none italic">
           Class<span className={isNature ? "text-primary" : "text-brutal-red"}>Pulse</span>
         </h1>
-        <p className="text-sm font-mono font-bold uppercase tracking-widest opacity-60">High-Contrast Polling Terminal</p>
+        <p className="text-xs sm:text-sm font-mono font-bold uppercase tracking-widest opacity-60">High-Contrast Polling Terminal</p>
       </div>
 
-      <div className="space-y-8">
+      <div className="space-y-6 sm:space-y-8">
         <input
           type="number"
           placeholder="ENTER CODE"
           value={code}
           onChange={(e) => setCode(e.target.value)}
-          className={`w-full px-8 py-6 bg-transparent border-4 border-black text-center text-4xl font-black font-mono placeholder-black/20 focus:outline-none transition-all
+          className={`w-full px-6 sm:px-8 py-4 sm:py-6 bg-transparent border-4 border-black text-center text-2xl sm:text-4xl font-black font-mono placeholder-black/20 focus:outline-none transition-all
             ${isNature ? "bg-white" : "bg-black/60 text-white border-white placeholder-white/20"}`}
         />
         
         <button 
           onClick={handleJoin}
-          className={`w-full py-6 btn-brutal text-2xl
+          className={`w-full py-4 sm:py-6 btn-brutal text-xl sm:text-2xl
             ${isNature ? "bg-primary text-white" : "bg-brutal-red text-white border-white shadow-[6px_6px_0px_0px_white]"}`}
         >
           Access Session
         </button>
       </div>
 
-      <div className="pt-12 border-t border-black/10">
+      <div className="pt-8 sm:pt-12 border-t border-black/10">
         <p className="text-[10px] uppercase font-mono font-black tracking-[0.3em] mb-4 opacity-40">Identity Signature</p>
-        <code className={`px-6 py-2 rounded-full font-mono font-bold border-2
+        <code className={`px-4 sm:px-6 py-2 rounded-full font-mono font-bold border-2 text-[10px] sm:text-sm
           ${isNature ? "bg-black text-white border-black" : "bg-white text-black border-white"}`}>
           {voterId}
         </code>
